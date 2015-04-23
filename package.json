@@ -1,0 +1,39 @@
+{
+  "name": "Express_API",
+  "version": "1.0.0",
+  "description": "A restful API for study and research purposes",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeffluppes/TestAPI.git"
+  },
+  "keywords": [
+    "Express",
+    "API",
+    "Mongo"
+  ],
+  "author": "Jeffrey Luppes, Jeffluppes",
+  "license": "MIT",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "https://github.com/jeffluppes/TestAPI",
+  "dependencies": {
+    "express": "^4.1.2",
+    "jade": "1.3.1",
+    "mocha": "1.16.2",
+    "mongoskin": "1.4.1",
+    "stylus": "0.44.0",
+    "body-parser": "*",
+    "morgan": "*"
+  },
+  "devDependencies": {
+  "mocha": "1.16.2",
+  "superagent": "0.15.7",
+  "expect.js": "0.2.0"
+ }
+}
