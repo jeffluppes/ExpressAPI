@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded())
 app.use(bodyParser.json())
 app.use(logger())
 
-var db = mongoskin.db('mongodb://@localhost:27017/test', {safe:true})
+var db = mongoskin.db('mongodb://@localhost:27017/planes', {safe:true})
 var id = mongoskin.helper.toObjectID
 
 app.param('collectionName', function(req, res, next, collectionName){
@@ -36,6 +36,32 @@ app.post('/collections/:collectionName', function(req, res, next) {
     res.send(results)
   })
 })
+
+//Geonear: retrieves all points near a specified point
+//db.planesF.aggregate([ { $geoNear: { near: [16.732269, 51.890169], distanceField: "distance", limit: 3 } } ]);
+
+app.get('/collections/:collectionName/geonear', function(req, res, next) {
+      console.log("lng: "+req.query.lng+"lat: "+req.query.lat+"distance: "+req.query.distance);
+      req.collection.aggregate([
+      {
+            "$geoNear": {
+                "near": {
+                     "type": "Point",
+                     "coordinates": [req.query.lng, req.query.lat]
+                 },
+                 "distanceField": "distance"
+                 //"maxDistance": req.query.distance,
+             }
+        },
+        {
+             "$sort": {"distance": -1} // Sort the nearest first
+        }
+    ],
+    function(err, docs) {
+         res.send(docs);
+    });
+});
+
 
 app.get('/collections/:collectionName/:id', function(req, res, next) {
   req.collection.findOne({_id: id(req.params.id)}, function(e, result){

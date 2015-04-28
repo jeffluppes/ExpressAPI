@@ -42,6 +42,38 @@ describe('express rest api server', function(){
       })
   })
 
+  it('retrieves a collection of points near a coordinate', function(done){
+    superagent.get('http://localhost:3000/collections/planes/geonear/')
+      .end(function(e, res){
+        // console.log(res.body)
+        expect(e).to.eql(null)
+        expect(res.body.length).to.be.above(0)
+        expect(res.body.map(function (item){return item._id})).to.contain(id)
+        done()
+      })
+  })
+
+  it('retrieves a collection of points corresponding to the same plane', function(done){
+    superagent.get('http://localhost:3000/collections/planes/track/')
+      .end(function(e, res){
+        // console.log(res.body)
+        expect(e).to.eql(null)
+        expect(res.body.length).to.be.above(0)
+        expect(res.body.map(function (item){return item._id})).to.contain(id)
+        done()
+      })
+  })
+  it('retrieves a collection of features that are active', function(done){
+    superagent.get('http://localhost:3000/collections/planes/state/')
+      .end(function(e, res){
+        // console.log(res.body)
+        expect(e).to.eql(null)
+        expect(res.body.length).to.be.above(0)
+        expect(res.body.map(function (item){return item._id})).to.contain(id)
+        done()
+      })
+  })
+
   it('updates an object', function(done){
     superagent.put('http://localhost:3000/collections/test/'+id)
       .send({name: 'Peter',
