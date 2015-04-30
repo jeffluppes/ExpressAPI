@@ -24,6 +24,7 @@ app.get('/', function(req, res, next) {
 app.get('/collections/:collectionName', function(req, res, next) {
   req.collection.find({}, {limit: 10, sort: [['_id', -1]]})
     .toArray(function(e, results){
+
       if (e) return next(e)
       res.send(results)
     }
@@ -40,27 +41,23 @@ app.post('/collections/:collectionName', function(req, res, next) {
 //Geonear: retrieves all points near a specified point
 //db.planesF.aggregate([ { $geoNear: { near: [16.732269, 51.890169], distanceField: "distance", limit: 3 } } ]);
 
-app.get('/collections/:collectionName/geonear', function(req, res, next) {
-      console.log("lng: "+req.query.lng+"lat: "+req.query.lat+"distance: "+req.query.distance);
+app.get('/collections/:collectionName/geonear', function(req, res) {
+  var lng = parseInt(req.query.lng),
+      lat = parseInt(req.query.lat);
       req.collection.aggregate([
       {
             "$geoNear": {
-                "near": {
-                     "type": "Point",
-                     "coordinates": [req.query.lng, req.query.lat]
-                 },
-                 "distanceField": "distance"
-                 //"maxDistance": req.query.distance,
+                "near": [lng, lat],
+                 "distanceField": "distance",
+                 "limit": 3
              }
-        },
-        {
-             "$sort": {"distance": -1} // Sort the nearest first
         }
-    ],
-    function(err, docs) {
-         res.send(docs);
-    });
-});
+      ],
+     function(err, docs) {
+      console.log(docs);
+          res.json(docs);
+     });
+ });
 
 
 app.get('/collections/:collectionName/:id', function(req, res, next) {
