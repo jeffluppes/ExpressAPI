@@ -62,6 +62,7 @@ app.get('/collections/:collectionName/geonear', function(req, res) {
  });
 
 //24h: returns all points older than 24h of the given identifier
+//TODO: should this take a limit as a param?
 app.get('/collections/:collectionName/24h', function(req, res) {
   var identifier = req.query.identifier;
   req.collection.aggregate([
@@ -82,8 +83,6 @@ app.get('/collections/:collectionName/24h', function(req, res) {
     res.send(results);
   });
 });
-
-//TODO: Returns all points of selected <x> older than 24h
 
 // Returns the most recent entry of <x>
 //TODO: needs to take an identifier I suppose before this gets useful ;)
@@ -110,7 +109,26 @@ app.get('/collections/:collectionName/mostRecent', function(req, res) {
   });
 });
 
-//TODO: Returns all points of <x>
+//Returns all points of <x>, the so-called track function. Most recent goes first
+app.get('/collections/:collectionName/track', function(req, res) {
+  var identifier = req.query.identifier;
+  req.collection.aggregate([
+    {
+      "$match": {
+        'properties.id': identifier
+      }
+    },
+    {
+      "$sort": {
+        'properties.Time': -1
+      }
+    }
+  ],
+  function(e, results){
+    if (e) return next(e);
+    res.send(results);
+  });
+});
 
 //TODO: Returns all points as defined by the criteria given in a filter query.
 // Probaby the hardest to actually implement.
