@@ -39,11 +39,11 @@ app.post('/collections/:collectionName', function(req, res, next) {
 })
 
 //Geonear: retrieves all points near a specified point
-//db.planesF.aggregate([ { $geoNear: { near: [16.732269, 51.890169], distanceField: "distance", limit: 3 } } ]);
-
+//TODO: Add params for distance, limit etc to query
 app.get('/collections/:collectionName/geonear', function(req, res) {
-  var lng = parseInt(req.query.lng),
-      lat = parseInt(req.query.lat);
+  var lng = parseFloat(req.query.lng),
+      lat = parseFloat(req.query.lat),
+      distance = parseInt(req.query.distance);
       req.collection.aggregate([
       {
             "$geoNear": {
@@ -54,7 +54,7 @@ app.get('/collections/:collectionName/geonear', function(req, res) {
         }
       ],
      function(err, docs) {
-      console.log(docs);
+      //console.log(docs);
           res.json(docs);
      });
  });

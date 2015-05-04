@@ -43,12 +43,12 @@ describe('express rest api server', function(){
   })
 
   it('retrieves a collection of points near a coordinate', function(done){
-    superagent.get('http://localhost:3000/collections/planes/geonear/')
+    superagent.get('http://localhost:3000/collections/planes/geonear?lng=16.732269&lat=51.890169')
       .end(function(e, res){
         // console.log(res.body)
         expect(e).to.eql(null)
         expect(res.body.length).to.be.above(0)
-        expect(res.body.map(function (item){return item._id})).to.contain(id)
+        expect(res.body.map(function (item){return item.geometry.type})).to.contain('Point')
         done()
       })
   })
