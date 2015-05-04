@@ -38,6 +38,8 @@ app.post('/collections/:collectionName', function(req, res, next) {
   })
 })
 
+
+// ----------- AGGREGATION FUNCTIONS ----------------------
 //Geonear: retrieves all points near a specified point
 //TODO: Add params for distance, limit etc to query
 app.get('/collections/:collectionName/geonear', function(req, res) {
@@ -58,6 +60,33 @@ app.get('/collections/:collectionName/geonear', function(req, res) {
           res.json(docs);
      });
  });
+
+//24h: returns all points older than 24h
+//TODO: should this be parameterized? 
+app.get('/collections/:collectionName/24h', function(req, res) {
+  req.collection.aggregate([
+    {
+      "$match": {
+        'properties.Time': {
+          "$lt": (new Date() - 1000*60*60)
+        }
+      }
+    }
+  ],
+  function(e, results){
+    if (e) return next(e);
+    res.send(results);
+  });
+});
+
+//TODO: Returns all points of selected <x> older than 24h
+
+//TODO: Returns the most recent entry of <x>
+
+//TODO: Returns all points of <x>
+
+//TODO: Returns all points as defined by the criteria given in a filter query.
+// Probaby the hardest to actually implement.
 
 
 app.get('/collections/:collectionName/:id', function(req, res, next) {
