@@ -84,7 +84,24 @@ app.get('/collections/:collectionName/24h', function(req, res) {
 
 //TODO: Returns all points of selected <x> older than 24h
 
-//TODO: Returns the most recent entry of <x>
+// Returns the most recent entry of <x>
+//TODO: needs to take an identifier I suppose before this gets useful ;)
+app.get('/collections/:collectionName/mostRecent', function(req, res) {
+  req.collection.aggregate([
+    {
+      "$sort": {
+        'properties.Time': -1
+      }
+    },
+    {
+      "$limit": 1
+    }
+  ],
+  function(e, results){
+    if (e) return next(e);
+    res.send(results);
+  });
+});
 
 //TODO: Returns all points of <x>
 
