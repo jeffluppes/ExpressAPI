@@ -62,7 +62,7 @@ app.get('/collections/:collectionName/geonear', function(req, res) {
  });
 
 //24h: returns all points older than 24h
-//TODO: should this be parameterized? 
+//TODO: should this be parameterized?
 app.get('/collections/:collectionName/24h', function(req, res) {
   req.collection.aggregate([
     {
@@ -71,6 +71,9 @@ app.get('/collections/:collectionName/24h', function(req, res) {
           "$lt": (new Date() - 1000*60*60)
         }
       }
+    },
+    {
+      "$limit": 100
     }
   ],
   function(e, results){
