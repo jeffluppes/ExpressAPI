@@ -61,12 +61,13 @@ app.get('/collections/:collectionName/geonear', function(req, res) {
      });
  });
 
-//24h: returns all points older than 24h
-//TODO: should this be parameterized?
+//24h: returns all points older than 24h of the given identifier
 app.get('/collections/:collectionName/24h', function(req, res) {
+  var identifier = req.query.identifier;
   req.collection.aggregate([
     {
       "$match": {
+        'properties.id': identifier,
         'properties.Time': {
           "$lt": (new Date() - 1000*60*60)
         }
@@ -87,7 +88,13 @@ app.get('/collections/:collectionName/24h', function(req, res) {
 // Returns the most recent entry of <x>
 //TODO: needs to take an identifier I suppose before this gets useful ;)
 app.get('/collections/:collectionName/mostRecent', function(req, res) {
+  var identifier = req.query.identifier;
   req.collection.aggregate([
+    {
+      "$match": {
+        'properties.id': identifier
+      }
+    },
     {
       "$sort": {
         'properties.Time': -1
