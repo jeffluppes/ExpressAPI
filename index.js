@@ -154,8 +154,8 @@ app.get('/collections/:collectionName/auditTrail/:id', function(req, res) {
           'Speed': {$push: '$properties.Speed'},
           'Squawk': {$first: '$properties.Squawk'},
           'Time': {$push: '$properties.Time'},
-          'FeatureTypeId': {$first: '$properties.FeatureTypeID'},
-          'PlaneType': {$first: '$properties.planeType'},
+          'FeatureTypeId': {$first: '$properties.FeatureTypeId'},
+          'PlaneType': {$first: '$properties.PlaneType'},
           'Active': {$push: "$properties.Active"}
         }
       },
