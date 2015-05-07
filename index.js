@@ -135,6 +135,32 @@ app.get('/collections/:collectionName/track', function(req, res) {
   });
 });
 
+
+//TODO: Audittrail: returns a single document with $pushed items of everything.
+app.get('/collections/:collectionName/auditTrail/:id', function(req, res) {
+  req.collection.aggregate([
+    {
+      "$match":
+        {
+          'properties.id': req.params.id
+        }
+    },
+    {
+      "$group":
+        {
+          '_id': 'properties.id',
+          'geometry.coordinates':
+              { $push:
+                    { coordinates: '$geometry.coordinates'}}
+        }
+    }
+  ],
+  function(e, results){
+    if (e) return e;
+    res.send(results);
+  });
+});
+
 // Finds a single item, by its properties.id - which may or may not be indexed
 // Thus, this might be slower than the indexed _id.
 // I'm also wondering what the difference is between this and findOne().
