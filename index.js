@@ -49,8 +49,8 @@ app.post('/collections/:collectionName', function(req, res, next) {
 //TODO: Add params for distance, limit etc to query
 app.get('/collections/:collectionName/geonear', function(req, res) {
   var lng = parseFloat(req.query.lng),
-      lat = parseFloat(req.query.lat),
-      distance = parseInt(req.query.distance);
+      lat = parseFloat(req.query.lat)
+      console.log("lng: "+lng+" lat:"+lat);
       req.collection.aggregate([
       {
             "$geoNear": {
@@ -62,7 +62,7 @@ app.get('/collections/:collectionName/geonear', function(req, res) {
       ],
      function(err, docs) {
       //console.log(docs);
-          res.json(docs);
+          res.send(docs);
      });
  });
 
